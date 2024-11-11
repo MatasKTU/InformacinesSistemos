@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventoriaus valdymas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Optional custom styles */
+        .navbar .profile-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .btn-logout {
+            background-color: red;
+            color: white;
+            border: none;
+        }
+        .btn-logout:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand text-white">Inventoriaus valdymas</span>
+        <div class="ml-auto d-flex align-items-center">
+            <a href="#" class="profile-icon mr-2">&#128100;</a> <!-- Profile icon with link -->
+            <button class="btn btn-logout" type="button">Atsijungti</button> <!-- Logout button -->
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h3>Tiekėjų Sąrašas</h3>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Pavadinimas</th>
+                    <th>Adresas</th>
+                    <th>Vardas</th>
+                    <th>Pavardė</th>
+                    <th>El. paštas</th>
+                    <th>Tel. nr</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Įmonė A</td>
+                    <td>Vilniaus g. 1, Vilnius</td>
+                    <td>Jonas</td>
+                    <td>Jonaitis</td>
+                    <td>jonas@imonea.lt</td>
+                    <td>+37061234567</td>
+                </tr>
+                <tr>
+                    <td>Įmonė B</td>
+                    <td>Kauno g. 2, Kaunas</td>
+                    <td>Petras</td>
+                    <td>Petraitis</td>
+                    <td>petras@imoneb.lt</td>
+                    <td>+37069876543</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

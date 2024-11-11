@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventoriaus valdymas - Produktų peržiūra</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar .profile-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .btn-logout {
+            background-color: red;
+            color: white;
+            border: none;
+        }
+        .btn-logout:hover {
+            background-color: darkred;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand text-white">Inventoriaus valdymas</span>
+        <div class="ml-auto d-flex align-items-center">
+            <a href="#" class="profile-icon mr-2">&#128100;</a>
+            <button class="btn btn-logout" type="button">Atsijungti</button>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Product Image Section -->
+            <div class="col-md-6">
+                <img src="https://via.placeholder.com/500x600" alt="Product Image" class="product-image mb-3">
+            </div>
+            
+            <!-- Product Details Section -->
+            <div class="col-md-6">
+                <h2>Produkto peržiūra</h2>
+                
+                <!-- Example: Displayed details for "Meškerė" -->
+                <div id="productDetails">
+                    <h4>Pavadinimas: Meškerė X200</h4>
+                    <p><strong>Kaina:</strong> €49.99</p>
+                    <p><strong>Aprašymas:</strong> Tai aukštos kokybės meškerė, puikiai tinkanti žvejybai upėse.</p>
+                    <p><strong>Gamintojas:</strong> Žvejys LT</p>
+                    <p><strong>Ilgis:</strong> 2.7m</p>
+                    <p><strong>Dalių skaičius:</strong> 4</p>
+                    <p><strong>Lankstumas:</strong> 8/10</p>
+                    <p><strong>Medžiaga:</strong> Anglies pluoštas</p>
+                    <p><strong>Žiedelių skaičius:</strong> 6</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleEditForm() {
+            const detailsSection = document.getElementById('productDetails');
+            const editForm = document.getElementById('editForm');
+
+            if (editForm.style.display === 'none') {
+                detailsSection.style.display = 'none';
+                editForm.style.display = 'block';
+            } else {
+                detailsSection.style.display = 'block';
+                editForm.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
