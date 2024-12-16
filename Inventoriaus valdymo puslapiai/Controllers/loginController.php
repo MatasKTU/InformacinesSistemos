@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } elseif ($user['role'] === 'tiekejas') {
                     header("Location: ../Sablonai/inv_pgr.html");
                 } elseif ($user['role'] === 'klientas') {
-                    header("Location: ../Sablonai/pagrindinis.html");
+                    header("Location: ../Sablonai/pagrindinis.php");
                 } else {
                     header("Location: ../Sablonai/prisijungti.html?error=unknown_role");
                 }
