@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventoriaus valdymas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Optional custom styles */
+        .navbar .profile-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .btn-logout {
+            background-color: red;
+            color: white;
+            border: none;
+        }
+        .btn-logout:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand text-white">Inventoriaus valdymas</span>
+        <div class="ml-auto d-flex align-items-center">
+            <a href="#" class="profile-icon mr-2">&#128100;</a> <!-- Profile icon with link -->
+            <a href="../Controllers/logout.php" class="btn btn-logout" type="button">Atsijungti</a> <!-- Logout button -->
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Buttons above the table -->
+        <div class="d-flex justify-content-between mb-3">
+            <a href="../Sablonai/inv_kurti.html" class="btn btn-primary">Kurti prekę</a>
+            <div id="adminButtons" style="display: none;">
+                <!--<a href="#" class="btn btn-success mx-2" onclick="sendRestockRequests()">Papildyti prekes</a>-->
+                <a href="#" class="btn btn-success mx-2">Papildyti prekes</a>
+            </div>
+            <div id="tiekejuButton">
+                <a href="../Sablonai/inv_tiek_sarasas.html" class="btn btn-secondary">Tiekėjų sąrašas</a>
+            </div>
+        </div>
+
+        <!-- Table displaying inventory -->
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Pavadinimas</th>
+                    <th>Kiekis</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="prekeTableBody">
+                <!-- Table content will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            console.log('Page loaded, attempting to load prekes...');
+            checkUserRole();
+            loadPrekes();
+        });
+    
+        function checkUserRole() {
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/menuController.php',
+                method: 'GET',
+                success: function(response) {
+                    console.log('User role:', response.role);
+                    if (response.role === 'admin') {
+                        $('#adminButtons').show();
+                        if ($('#tiekejuButton').length === 0) {
+                            $('.navbar').append(`
+                                <a href="inv_tiek_sarasas.html" id="tiekejuButton" 
+                                   class="btn btn-light mr-3">Tiekėjų sąrašas</a>
+                            `);
+                        }
+                    } else {
+                        $('#adminButtons').hide();
+                        $('#tiekejuButton').hide();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error checking role:', error);
+                }
+            });
+        }
+    
+        function loadPrekes() {
+            console.log('Making AJAX request...');
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/prekeController.php',
+                method: 'GET',
+                success: function(data) {
+                    console.log('Received data:', data);
+                    const tableBody = $('#prekeTableBody');
+                    tableBody.empty();
+    
+                    data.forEach(preke => {
+                        tableBody.append(`
+                            <tr>
+                                <td>${preke.id_Preke}</td>
+                                <td>${preke.pavadinimas}</td>
+                                <td>${preke.kiekis}</td>
+                                <td>
+                                    <a href="inv_redaguoti.html?id=${preke.id_Preke}" class="btn btn-sm btn-primary">Redaguoti</a>
+                                    <button onclick="deletePreke(${preke.id_Preke}, '${preke.pavadinimas}')" class="btn btn-sm btn-danger">Ištrinti</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+                    alert('Įvyko klaida gaunant prekes: ' + error);
+                }
+            });
+        }
+
+        function deletePreke(id, pavadinimas) {
+            if (confirm(`Ar tikrai norite ištrinti prekę "${pavadinimas}"?`)) {
+                $.ajax({
+                    url: '../Controllers/Inventoriaus_valdymas/prekeController.php',
+                    method: 'DELETE',
+                    data: JSON.stringify({ id: id }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Prekė sėkmingai ištrinta');
+                            loadPrekes(); // Reload the table
+                        } else {
+                            alert('Klaida trinant prekę: ' + response.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Įvyko klaida trinant prekę');
+                    }
+                });
+            }
+        }
+
+        function sendRestockRequests() {
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/papildymasController.php',
+                method: 'GET',
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                    } else {
+                        alert('Klaida: ' + response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('Įvyko klaida siunčiant užklausas: ' + error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
