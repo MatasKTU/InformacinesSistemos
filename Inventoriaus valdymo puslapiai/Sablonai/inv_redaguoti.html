@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventoriaus valdymas - Produktų redagavimas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar .profile-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .btn-logout {
+            background-color: red;
+            color: white;
+            border: none;
+        }
+        .btn-logout:hover {
+            background-color: darkred;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand text-white">Inventoriaus valdymas</span>
+        <div class="ml-auto d-flex align-items-center">
+            <a href="#" class="profile-icon mr-2">&#128100;</a>
+            <a href="../Controllers/logout.php" class="btn btn-logout">Atsijungti</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Product Image Section -->
+            <div class="col-md-6">
+                <img id="productImage" src="" alt="Product Image" class="product-image mb-3">
+            </div>
+            
+            <!-- Product Data Form Section -->
+            <div class="col-md-6">
+                <h2>Redaguoti produktą</h2>
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="pavadinimas">Pavadinimas</label>
+                        <input type="text" class="form-control" id="pavadinimas" name="pavadinimas" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="kaina">Kaina</label>
+                        <input type="number" step="0.01" class="form-control" id="kaina" name="kaina" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="aprasymas">Aprašymas</label>
+                        <textarea class="form-control" id="aprasymas" name="aprasymas"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="kiekis">Kiekis</label>
+                        <input type="number" class="form-control" id="kiekis" name="kiekis" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gamintojas">Gamintojas</label>
+                        <select class="form-control" id="gamintojas" name="fk_Gamintojas_id_Gamintojas" required>
+                            <option value="">Pasirinkite...</option>
+                        </select>
+                    </div>
+                    <div id="dynamicFields">
+                        <!-- Dynamic fields will be inserted here -->
+                    </div>
+                    <div class="form-group">
+                        <label for="paveikslas">Paveikslo URL</label>
+                        <input type="url" class="form-control" id="paveikslas" name="paveikslas">
+                    </div>
+                    <div class="form-group" id="supplierGroup">
+                        <label for="tiekejas">Tiekėjas</label>
+                        <select class="form-control" id="tiekejas" name="fk_Tiekejas_id_Naudotojas" required>
+                            <option value="">Pasirinkite tiekėją...</option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <button type="submit" class="btn btn-success">Išsaugoti</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (productId) {
+                loadProductData(productId);
+            }
+
+            // Load manufacturers
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/prekeController.php?action=manufacturers',
+                method: 'GET',
+                success: function(data) {
+                    if (Array.isArray(data)) {
+                        const select = $('#gamintojas');
+                        select.empty();
+                        select.append('<option value="">Pasirinkite...</option>');
+                        data.forEach(manufacturer => {
+                            select.append(`<option value="${manufacturer.id_Gamintojas}">
+                                ${manufacturer.pavadinimas}
+                            </option>`);
+                        });
+                    }
+                }
+            });
+
+            // Check user role and load suppliers
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/menuController.php',
+                method: 'GET',
+                success: function(response) {
+                    $('#supplierGroup').show(); // Show for both roles
+                    
+                    if (response.role === 'admin') {
+                        // For admin, load all suppliers
+                        loadSuppliers();
+                    } else if (response.role === 'tiekejas') {
+                        // For tiekejas, load only their own info
+                        loadCurrentSupplier(response.id_Naudotojas);
+                        $('#tiekejas').prop('disabled', true); // Disable selection for tiekejas
+                    }
+                }
+            });
+
+            function loadSuppliers() {
+                $.ajax({
+                    url: '../Controllers/Inventoriaus_valdymas/prekeController.php?action=suppliers',
+                    method: 'GET',
+                    success: function(data) {
+                        if (Array.isArray(data)) {
+                            const select = $('#tiekejas');
+                            select.empty();
+                            select.append('<option value="">Pasirinkite tiekėją...</option>');
+                            data.forEach(supplier => {
+                                select.append(`<option value="${supplier.id_Naudotojas}">
+                                    ${supplier.pavadinimas} (${supplier.vardas} ${supplier.pavarde})
+                                </option>`);
+                            });
+                        }
+                    }
+                });
+            }
+
+            function loadCurrentSupplier(userId) {
+                $.ajax({
+                    url: '../Controllers/Inventoriaus_valdymas/prekeController.php?action=suppliers',
+                    method: 'GET',
+                    success: function(data) {
+                        if (Array.isArray(data)) {
+                            const currentSupplier = data.find(s => parseInt(s.id_Naudotojas) === parseInt(userId));
+                            if (currentSupplier) {
+                                const select = $('#tiekejas');
+                                select.empty();
+                                select.append(`<option value="${currentSupplier.id_Naudotojas}" selected>
+                                    ${currentSupplier.pavadinimas} (${currentSupplier.vardas} ${currentSupplier.pavarde})
+                                </option>`);
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Update your form submission handler
+            $('#editForm').submit(function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                formData.append('action', 'update');
+                formData.append('id_Preke', productId);
+
+                $.ajax({
+                    url: '../Controllers/Inventoriaus_valdymas/prekeController.php',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Produktas sėkmingai atnaujintas');
+                            window.location.href = 'inv_pgr.html';
+                        } else {
+                            alert('Klaida atnaujinant produktą: ' + response.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Įvyko klaida atnaujinant produktą');
+                    }
+                });
+            });
+        });
+
+        function loadProductData(productId) {
+            $.ajax({
+                url: `../Controllers/Inventoriaus_valdymas/prekeController.php?id=${productId}`,
+                method: 'GET',
+                success: function(data) {
+                    if (data.error) {
+                        alert('Klaida gaunant produkto duomenis');
+                        return;
+                    }
+                    
+                    fillForm(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('Įvyko klaida gaunant produkto duomenis');
+                }
+            });
+        }
+
+        function fillForm(data) {
+            $('#pavadinimas').val(data.pavadinimas);
+            $('#kaina').val(data.kaina);
+            $('#aprasymas').val(data.aprasymas);
+            $('#kiekis').val(data.kiekis);
+            $('#gamintojas').val(data.fk_Gamintojas_id_Gamintojas);
+            
+            // Set supplier if available
+            if (data.fk_Tiekejas_id_Naudotojas) {
+                $('#tiekejas').val(data.fk_Tiekejas_id_Naudotojas);
+            }
+            
+            // Dynamic fields
+            const dynamicFields = $('#dynamicFields');
+            dynamicFields.empty();
+            
+            const fields = [
+                { name: 'ilgis', label: 'Ilgis', type: 'number', step: '0.01' },
+                { name: 'daliu_sk', label: 'Dalių skaičius', type: 'number' },
+                { name: 'medziaga', label: 'Medžiaga', type: 'text' },
+                { name: 'ziedeliu_sk', label: 'Žiedelių skaičius', type: 'number' },
+                { name: 'dydis', label: 'Dydis', type: 'number' },
+                { name: 'guoliai', label: 'Guoliai', type: 'number' },
+                { name: 'perdavimas', label: 'Perdavimas', type: 'text' },
+                { name: 'bugnelio_talpa', label: 'Būgnelio talpa', type: 'number' },
+                { name: 'svoris', label: 'Svoris', type: 'number', step: '0.01' },
+                { name: 'lankstumas', label: 'Lankstumas', type: 'number' }
+            ];
+
+            fields.forEach(field => {
+                if (data[field.name] !== null) {
+                    const fieldHtml = `
+                        <div class="form-group">
+                            <label for="${field.name}">${field.label}</label>
+                            <input type="${field.type}" 
+                                   class="form-control" 
+                                   id="${field.name}" 
+                                   name="${field.name}"
+                                   ${field.step ? `step="${field.step}"` : ''}
+                                   value="${data[field.name]}">
+                        </div>
+                    `;
+                    dynamicFields.append(fieldHtml);
+                }
+            });
+
+            // Set product image
+            if (data.paveikslas) {
+                $('#productImage').attr('src', data.paveikslas);
+                $('#paveikslas').val(data.paveikslas);
+            }
+        }
+    </script>
+</body>
+</html>

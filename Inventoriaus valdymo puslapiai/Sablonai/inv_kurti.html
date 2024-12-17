@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventoriaus valdymas - Naujas produktas</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar .profile-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .btn-logout {
+            background-color: red;
+            color: white;
+            border: none;
+        }
+        .btn-logout:hover {
+            background-color: darkred;
+        }
+        .form-section {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand text-white">Inventoriaus valdymas</span>
+        <div class="ml-auto d-flex align-items-center">
+            <a href="#" class="profile-icon mr-2">&#128100;</a>
+            <a href="../Controllers/logout.php" class="btn btn-logout">Atsijungti</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2>Naujas produktas</h2>
+        
+        <!-- Category Selection -->
+        <div class="form-group">
+            <label for="categorySelect">Pasirinkite kategoriją:</label>
+            <select class="form-control" id="categorySelect">
+                <option value="">Pasirinkite...</option>
+            </select>
+        </div>
+
+        <!-- Dynamic Form -->
+        <form id="productForm" class="mt-4">
+            <!-- Basic Fields -->
+            <div class="form-group">
+                <label for="pavadinimas">Pavadinimas</label>
+                <input type="text" class="form-control" id="pavadinimas" name="pavadinimas" required>
+            </div>
+
+            <div class="form-group">
+                <label for="kaina">Kaina</label>
+                <input type="number" step="0.01" class="form-control" id="kaina" name="kaina" required>
+            </div>
+
+            <div class="form-group">
+                <label for="aprasymas">Aprašymas</label>
+                <textarea class="form-control" id="aprasymas" name="aprasymas"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="kiekis">Kiekis</label>
+                <input type="number" class="form-control" id="kiekis" name="kiekis" required>
+            </div>
+
+            <div class="form-group">
+                <label for="gamintojas">Gamintojas</label>
+                <select class="form-control" id="gamintojas" name="fk_Gamintojas_id_Gamintojas" required>
+                    <option value="">Pasirinkite...</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="supplierGroup" style="display: none;">
+                <label for="tiekejas">Tiekėjas</label>
+                <select class="form-control" id="tiekejas" name="fk_Tiekejas_id_Naudotojas">
+                    <option value="">Pasirinkite tiekėją...</option>
+                </select>
+            </div>
+
+            <!-- Dynamic Fields -->
+            <div id="meskereFields" class="form-section">
+                <div class="form-group">
+                    <label for="ilgis">Ilgis</label>
+                    <input type="number" step="0.01" class="form-control" id="ilgis" name="ilgis">
+                </div>
+                <div class="form-group">
+                    <label for="daliu_sk">Dalių skaičius</label>
+                    <input type="number" class="form-control" id="daliu_sk" name="daliu_sk">
+                </div>
+                <div class="form-group">
+                    <label for="medziaga">Medžiaga</label>
+                    <input type="text" class="form-control" id="medziaga" name="medziaga">
+                </div>
+                <div class="form-group">
+                    <label for="ziedeliu_sk">Žiedelių skaičius</label>
+                    <input type="number" class="form-control" id="ziedeliu_sk" name="ziedeliu_sk">
+                </div>
+                <div class="form-group">
+                    <label for="lankstumas">Lankstumas</label>
+                    <select class="form-control" id="lankstumas" name="lankstumas">
+                        <option value="">Pasirinkite...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="riteFields" class="form-section">
+                <div class="form-group">
+                    <label for="dydis">Dydis</label>
+                    <input type="number" class="form-control" id="dydis" name="dydis">
+                </div>
+                <div class="form-group">
+                    <label for="guoliai">Guolių skaičius</label>
+                    <input type="number" class="form-control" id="guoliai" name="guoliai">
+                </div>
+                <div class="form-group">
+                    <label for="perdavimas">Perdavimo santykis</label>
+                    <input type="text" class="form-control" id="perdavimas" name="perdavimas">
+                </div>
+                <div class="form-group">
+                    <label for="bugnelio_talpa">Būgnelio talpa</label>
+                    <input type="number" class="form-control" id="bugnelio_talpa" name="bugnelio_talpa">
+                </div>
+                <div class="form-group">
+                    <label for="svoris">Svoris</label>
+                    <input type="number" step="0.01" class="form-control" id="svoris" name="svoris">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="paveikslas">Paveikslo URL</label>
+                <input type="url" class="form-control" id="paveikslas" name="paveikslas">
+            </div>
+
+            <button type="submit" class="btn btn-success">Sukurti</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Load categories
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/prekeController.php?action=categories',
+                method: 'GET',
+                success: function(data) {
+                    console.log('Received categories:', data);
+                    if (Array.isArray(data)) {
+                        $('#categorySelect').empty();
+                        $('#categorySelect').append('<option value="">Pasirinkite...</option>');
+                        data.forEach(category => {
+                            $('#categorySelect').append(`<option value="${category}">${category}</option>`);
+                        });
+                    } else {
+                        console.error('Received invalid categories data:', data);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+                    alert('Įvyko klaida gaunant kategorijas: ' + error);
+                }
+            });
+
+            // Load manufacturers
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/prekeController.php?action=manufacturers',
+                method: 'GET',
+                success: function(data) {
+                    console.log('Received manufacturers:', data);
+                    if (Array.isArray(data)) {
+                        $('#gamintojas').empty();
+                        $('#gamintojas').append('<option value="">Pasirinkite...</option>');
+                        data.forEach(manufacturer => {
+                            $('#gamintojas').append(`<option value="${manufacturer.id_Gamintojas}">${manufacturer.pavadinimas}</option>`);
+                        });
+                    } else {
+                        console.error('Received invalid manufacturers data:', data);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+                    alert('Įvyko klaida gaunant gamintojus: ' + error);
+                }
+            });
+
+            // Load lankstumas
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/prekeController.php?action=lankstumas',
+                method: 'GET',
+                success: function(data) {
+                    console.log('Received lankstumas:', data);
+                    if (Array.isArray(data)) {
+                        data.forEach(item => {
+                            $('#lankstumas').append(`<option value="${item.id_Prekes_lankstumas}">${item.name}</option>`);
+                        });
+                    } else {
+                        console.error('Received invalid lankstumas data:', data);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+                    alert('Įvyko klaida gaunant lankstumo reikšmes: ' + error);
+                }
+            });
+
+            // Handle category selection
+            $('#categorySelect').change(function() {
+                $('.form-section').hide();
+                if (this.value === 'Meškerės') {
+                    $('#meskereFields').show();
+                } else if (this.value === 'Ritės') {
+                    $('#riteFields').show();
+                }
+            });
+
+            // Check if user is admin
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/menuController.php',
+                method: 'GET',
+                success: function(response) {
+                    if (response.role === 'admin') {
+                        // Show supplier selection for admin
+                        $('#supplierGroup').show();
+                        // Load suppliers
+                        $.ajax({
+                            url: '../Controllers/Inventoriaus_valdymas/prekeController.php?action=suppliers',
+                            method: 'GET',
+                            success: function(data) {
+                                if (Array.isArray(data)) {
+                                    data.forEach(supplier => {
+                                        $('#tiekejas').append(`<option value="${supplier.id_Naudotojas}">
+                                            ${supplier.pavadinimas} (${supplier.vardas} ${supplier.pavarde})
+                                        </option>`);
+                                    });
+                                }
+                            }
+                        });
+                    } else if (response.role === 'tiekejas') {
+                        // For tiekejas, create a hidden input instead of disabled select
+                        $('#supplierGroup').hide();
+                        $('#tiekejas').prop('required', false);
+                        $('<input>').attr({
+                            type: 'hidden',
+                            name: 'fk_Tiekejas_id_Naudotojas',
+                            value: response.id_Naudotojas
+                        }).appendTo('#productForm');
+                    }
+                }
+            });
+
+            // Handle form submission
+            $('#productForm').submit(function(e) {
+                e.preventDefault();
+                
+                let formData = {
+                    action: 'create',
+                    pavadinimas: $('#pavadinimas').val(),
+                    kaina: $('#kaina').val(),
+                    aprasymas: $('#aprasymas').val(),
+                    kategorija: $('#categorySelect').val(),
+                    kiekis: $('#kiekis').val(),
+                    paveikslas: $('#paveikslas').val(),
+                    fk_Gamintojas_id_Gamintojas: $('#gamintojas').val(),
+                    fk_Tiekejas_id_Naudotojas: $('#tiekejas').val() || null,
+                    // ... rest of your form fields ...
+                };
+
+                // Add optional fields based on category
+                if ($('#categorySelect').val() === 'Meškerės') {
+                    formData = {
+                        ...formData,
+                        ilgis: $('#ilgis').val() || null,
+                        daliu_sk: $('#daliu_sk').val() || null,
+                        medziaga: $('#medziaga').val() || null,
+                        ziedeliu_sk: $('#ziedeliu_sk').val() || null,
+                        lankstumas: $('#lankstumas').val() || null
+                    };
+                } else if ($('#categorySelect').val() === 'Ritės') {
+                    formData = {
+                        ...formData,
+                        dydis: $('#dydis').val() || null,
+                        guoliai: $('#guoliai').val() || null,
+                        perdavimas: $('#perdavimas').val() || null,
+                        bugnelio_talpa: $('#bugnelio_talpa').val() || null,
+                        svoris: $('#svoris').val() || null
+                    };
+                }
+
+                $.ajax({
+                    url: '../Controllers/Inventoriaus_valdymas/prekeController.php',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Produktas sėkmingai sukurtas');
+                            window.location.href = 'inv_pgr.html';
+                        } else {
+                            alert('Klaida kuriant produktą: ' + (response.error || 'Nežinoma klaida'));
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Įvyko klaida kuriant produktą: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

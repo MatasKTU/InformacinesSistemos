@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apmokėjimas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar .payment-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .payment-section {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .submit-btn {
+            background-color: green;
+            color: white;
+            border: none;
+            width: 100%;
+        }
+        .submit-btn:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand text-white">Apmokėjimas</span>
+		<div class="ml-auto d-flex align-items-center">
+            <a href="#" class="profile-icon">&#128100;</a>
+            <button class="btn btn-danger ml-2" id="logoutButton">Atsijungti</button>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="payment-section">
+            <h2 class="text-center mb-4">Įveskite Kortelės Duomenis</h2>
+
+            <!-- Payment Form -->
+            <form>
+                <div class="form-group">
+                    <label for="cardName">Kortelės Savininko Vardas</label>
+                    <input type="text" class="form-control" id="cardName" placeholder="Įveskite vardą ant kortelės">
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber">Kortelės Numeris</label>
+                    <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9123 4567" maxlength="19" oninput="formatCardNumber(this)">
+                </div>
+                <div class="form-group">
+                    <label for="expiryDate">Galiojimo Data</label>
+                    <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" maxlength="5" oninput="formatExpiryDate(this)">
+                </div>
+                <div class="form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="password" class="form-control" id="cvv" placeholder="***" maxlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="amount">Suma</label>
+                    <input type="text" class="form-control" id="amount" value="50.00 €" readonly>
+                </div>
+
+                <!-- Submit Payment Button -->
+                <a href="pagrindinis.html" type="submit" class="btn submit-btn mt-4">Apmokėti</a>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // JavaScript function to format the card number with spaces
+        function formatCardNumber(input) {
+            input.value = input.value.replace(/\W/gi, '').replace(/(.{4})/g, '$1 ').trim();
+        }
+
+        // JavaScript function to format the expiry date as MM/YY
+        function formatExpiryDate(input) {
+            input.value = input.value.replace(/^(\d{2})(\d{0,2})/, '$1/$2').slice(0, 5);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventoriaus valdymas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Optional custom styles */
+        .navbar .profile-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .btn-logout {
+            background-color: red;
+            color: white;
+            border: none;
+        }
+        .btn-logout:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand text-white">Inventoriaus valdymas</span>
+        <div class="ml-auto d-flex align-items-center">
+            <a href="#" class="profile-icon mr-2">&#128100;</a>
+            <a href="../Controllers/logout.php" class="btn btn-logout" type="button">Atsijungti</a>
+        </div>
+    </nav>
+    
+    <div class="container mt-4">
+        <h3>Tiekėjų Sąrašas</h3>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Pavadinimas</th>
+                    <th>Adresas</th>
+                    <th>Vardas</th>
+                    <th>Pavardė</th>
+                    <th>El. paštas</th>
+                    <th>Tel. nr</th>
+                </tr>
+            </thead>
+            <tbody id="tiekejaTableBody">
+                <!-- Table content will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            console.log('Page loaded, attempting to load tiekejai...');
+            loadTiekejai();
+        });
+
+        function loadTiekejai() {
+            console.log('Making AJAX request...');
+            $.ajax({
+                url: '../Controllers/Inventoriaus_valdymas/tiekejasController.php',
+                method: 'GET',
+                success: function(data) {
+                    console.log('Received data:', data);
+                    const tableBody = $('#tiekejaTableBody');
+                    tableBody.empty();
+
+                    data.forEach(tiekejas => {
+                        tableBody.append(`
+                            <tr>
+                                <td>${tiekejas.pavadinimas}</td>
+                                <td>${tiekejas.adresas}</td>
+                                <td>${tiekejas.vardas}</td>
+                                <td>${tiekejas.pavarde}</td>
+                                <td>${tiekejas.el_pastas}</td>
+                                <td>${tiekejas.telefono_nr}</td>
+                            </tr>
+                        `);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+                    alert('Įvyko klaida gaunant tiekėjus: ' + error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

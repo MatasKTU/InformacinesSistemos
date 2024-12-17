@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventoriaus valdymas - Produktų redagavimas</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Optional custom styles */
+        .navbar .profile-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .btn-logout {
+            background-color: red;
+            color: white;
+            border: none;
+        }
+        .btn-logout:hover {
+            background-color: darkred;
+        }
+        .product-image {
+            max-width: 100%;
+            height: auto;
+        }
+        /* Initially hide all form fields */
+        .form-section {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand text-white">Inventoriaus valdymas</span>
+        <div class="ml-auto d-flex align-items-center">
+            <a href="#" class="profile-icon mr-2">&#128100;</a> <!-- Profile icon with link -->
+            <button class="btn btn-logout" type="button">Atsijungti</button> <!-- Logout button -->
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <!-- Product Image Section -->
+            <div class="col-md-6">
+                <img src="https://via.placeholder.com/500x600" alt="Product Image" class="product-image mb-3">
+            </div>
+            
+            <!-- Product Data Form Section -->
+            <div class="col-md-6">
+                <h2>Redaguoti produktą</h2>
+
+                <!-- Selection buttons for Meškerė and Ritė -->
+                <div class="btn-group mb-4" role="group" aria-label="Product Type">
+                    <button type="button" class="btn btn-outline-primary" onclick="showForm('meskere', this)">Meškerė</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="showForm('rite', this)">Ritė</button>
+                </div>
+
+                <!-- Meškerė Form Section -->
+                <div id="meskereForm" class="form-section">
+                    <form>
+                        <div class="form-group">
+                            <label for="productName">Pavadinimas</label>
+                            <input type="text" class="form-control" id="productName" placeholder="Įveskite pavadinimą">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Kaina</label>
+                            <input type="number" class="form-control" id="productPrice" placeholder="Įveskite kainą">
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">Aprašymas</label>
+                            <textarea class="form-control" id="productDescription" rows="3" placeholder="Įveskite aprašymą"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPicture">Paveikslėlis</label>
+                            <input type="file" class="form-control-file" id="productPicture">
+                        </div>
+                        <div class="form-group">
+                            <label for="manufacturer">Gamintojas</label>
+                            <input type="text" class="form-control" id="manufacturer" placeholder="Įveskite gamintoją">
+                        </div>
+                        <div class="form-group">
+                            <label for="length">Ilgis</label>
+                            <input type="text" class="form-control" id="length" placeholder="Įveskite ilgį">
+                        </div>
+                        <div class="form-group">
+                            <label for="part_count">Dalių skaičius</label>
+                            <input type="text" class="form-control" id="part_count" placeholder="Įveskite dalių skaičių">
+                        </div>
+                        <div class="form-group">
+                            <label for="flex">Lankstumas, 1-10</label>
+                            <input type="text" class="form-control" id="flex" placeholder="Įveskite lankstumą">
+                        </div>
+                        <div class="form-group">
+                            <label for="material">Medžiaga</label>
+                            <input type="text" class="form-control" id="material" placeholder="Įveskite medžiagą">
+                        </div>
+                        <div class="form-group">
+                            <label for="ring_count">Žiedelių skaičius</label>
+                            <input type="text" class="form-control" id="ring_count" placeholder="Įveskite žiedelių skaičių">
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-success">Išsaugoti</button>
+                            <button type="button" class="btn btn-danger">Pašalinti</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Ritė Form Section -->
+                <div id="riteForm" class="form-section">
+                    <form>
+                        <div class="form-group">
+                            <label for="productName">Pavadinimas</label>
+                            <input type="text" class="form-control" id="productName" placeholder="Įveskite pavadinimą">
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Kaina</label>
+                            <input type="number" class="form-control" id="productPrice" placeholder="Įveskite kainą">
+                        </div>
+                        <div class="form-group">
+                            <label for="productDescription">Aprašymas</label>
+                            <textarea class="form-control" id="productDescription" rows="3" placeholder="Įveskite aprašymą"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPicture">Paveikslėlis</label>
+                            <input type="file" class="form-control-file" id="productPicture">
+                        </div>
+                        <div class="form-group">
+                            <label for="manufacturer">Gamintojas</label>
+                            <input type="text" class="form-control" id="manufacturer" placeholder="Įveskite gamintoją">
+                        </div>
+                        <div class="form-group">
+                            <label for="productSize">Dydis</label>
+                            <input type="text" class="form-control" id="productSize" placeholder="Įveskite dydį">
+                        </div>
+                        <div class="form-group">
+                            <label for="reelBearing">Guolis</label>
+                            <input type="text" class="form-control" id="reelBearing" placeholder="Įveskite guolio tipą">
+                        </div>
+                        <div class="form-group">
+                            <label for="gearRatio">Perdavimo santykis</label>
+                            <input type="text" class="form-control" id="gearRatio" placeholder="Įveskite perdavimo santykį">
+                        </div>
+                        <div class="form-group">
+                            <label for="capacity">Talpa, m</label>
+                            <input type="text" class="form-control" id="capacity" placeholder="Įveskite talpą metrais">
+                        </div>
+                        <div class="form-group">
+                            <label for="weight">Svoris, g</label>
+                            <input type="text" class="form-control" id="weight" placeholder="Įveskite svorį gramais">
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Kiekis</label>
+                            <input type="number" class="form-control" id="amount" placeholder="Įveskite kiekį">
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-success">Išsaugoti</button>
+                            <button type="button" class="btn btn-danger">Pašalinti</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // JavaScript function to show the specific form based on selection
+        function showForm(formType) {
+            document.getElementById('meskereForm').style.display = formType === 'meskere' ? 'block' : 'none';
+            document.getElementById('riteForm').style.display = formType === 'rite' ? 'block' : 'none';
+
+            // Remove 'active' class from all buttons and add it to the clicked button
+            const buttons = document.querySelectorAll('.btn-group .btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        }
+    </script>
+</body>
+</html>
