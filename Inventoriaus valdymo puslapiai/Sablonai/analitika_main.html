@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analitikos valdymas - Ataskaitos</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .section-heading { margin-top: 20px; margin-bottom: 10px; text-align: center; }
+        .button-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .button-group button { min-width: 250px; }
+        .main-heading { text-align: center; } /* Center-align for the h2 heading */
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <span class="navbar-brand text-white">Analitikos valdymas</span>
+        <div class="ml-auto d-flex align-items-center">
+            <a href="administratoriaus_pagrindinis.html" class="btn btn-light ml-2">Atgal</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="main-heading">Ataskaitų valdymas</h2> <!-- Centered h2 -->
+
+        <!-- Ataskaitos sudarymas Section -->
+        <div>
+            <h4 class="section-heading">Ataskaitos sudarymas</h4>
+            <div class="button-group mb-4">
+                <button type="button" class="btn btn-outline-primary" onclick="navigateTo('pardavimu_ataskaitos_sudarymas.php')">Sudaryti pardavimų ataskaitą</button>
+                <button type="button" class="btn btn-outline-primary" onclick="navigateTo('naudotoju_elgsenos_ataskaitos_sudarymas.php')">Sudaryti naudotojų elgsenos ataskaitą</button>
+                <button type="button" class="btn btn-outline-primary" onclick="navigateTo('pelno_ataskaitos_sudarymas.php')">Sudaryti įmonės pelno ataskaitą</button>
+            </div>
+        </div>
+
+        <!-- Ataskaitų peržiūra Section -->
+        <div>
+            <h4 class="section-heading">Ataskaitų peržiūra</h4>
+            <div class="button-group mb-4">
+                <button type="button" class="btn btn-outline-primary" onclick="navigateTo('pardavimu_ataskaitu_perziura.php')">Peržiūrėti pardavimų ataskaitas</button>
+                <button type="button" class="btn btn-outline-primary" onclick="navigateTo('naudotoju_elgsenos_ataskaitu_perziura.php')">Peržiūrėti naudotojų elgsenos ataskaitas</button>
+                <button type="button" class="btn btn-outline-primary" onclick="navigateTo('pelno_ataskaitu_perziura.php')">Peržiūrėti įmonės pelno ataskaitas</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function navigateTo(pageUrl) {
+            window.location.href = pageUrl;
+        }
+    </script>
+</body>
+</html>
