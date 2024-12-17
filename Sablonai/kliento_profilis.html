@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Užklausų sąrašas</title>
-    <!-- Bootstrap CSS -->
+    <title>Kliento informacija</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
@@ -25,51 +24,27 @@
             cursor: pointer;
             margin-left: 15px;
         }
-    
     </style>
 </head>
-
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-        <span class="navbar-brand text-white">Pagalbos užklausos</span>
-        <a href="administratoriaus_pagrindinis.html" class="btn btn-light mr-3">Pagrindinis</a>
+        <span class="navbar-brand text-white">Kliento informacija</span>
+        <a href="adminUzklausos.php" class="btn btn-light mr-3">Atgal</a>
         <div class="ml-auto d-flex align-items-center">
             <a href="redaguoti_paskyra.html" class="profile-icon">&#128100;</a>
             <a href="atsijungti.html" class="btn btn-danger ml-2">Atsijungti</a>
-
         </div>
     </nav>
 
-    <!-- Main Content -->
     <div class="container mt-4">
-        <h2>Pagalbos užklausų sąrašas</h2>
-        <table class="table table-bordered">
-            <thead class="thead-light">
-                <tr>
-                    <th>Pavadinimas</th>
-                    <th>Data</th>
-                    <th>Aprašas</th>
-                    <th>Būsena</th>
-                    <th>Veiksmai</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Sistemos klaida</td>
-                    <td>2024-11-11</td>
-                    <td>Klaida bandant prisijungti prie paskyros</td>
-                    <td>Sprendžiama</td>
-                    <td>
-                        <div class="d-flex justify-content-start">
-                            <a href="Užklausa1.html" class="btn btn-success mr-2">Peržiūrėti</a>
-                            <a href="Admin_Redaguoti_uzklausa.html" class="btn btn-success">Atsakyti</a>
-                        </div>
-                    </td>
-                    
-                </tr>
-            </tbody>
-        </table>
+        <h2>Kliento informacija</h2>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Vardas:</strong> <?php echo htmlspecialchars($klientas['vardas']); ?></li>
+            <li class="list-group-item"><strong>Pavardė:</strong> <?php echo htmlspecialchars($klientas['pavarde']); ?></li>
+            <li class="list-group-item"><strong>El. paštas:</strong> <?php echo htmlspecialchars($klientas['el_pastas']); ?></li>
+            <li class="list-group-item"><strong>Telefono nr.:</strong> <?php echo htmlspecialchars($klientas['telefono_nr']); ?></li>
+        </ul>
     </div>
 
     <!-- Bootstrap JS and dependencies -->

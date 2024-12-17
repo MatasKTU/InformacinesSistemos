@@ -32,40 +32,28 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-success">
         <span class="navbar-brand text-white">Sukurti naują pagalbos užklausą</span>
-        <a href="pagrindinis.html" class="btn btn-light mr-3">Pagrindinis</a>
         <div class="ml-auto d-flex align-items-center">
-            <a href="Naud_pagalbos_uzklausa.html" class="message-icon mr-4"><i class="bi bi-envelope-fill mr-2"></i>Pagalba</a>
-            <a href="krepselis.html" class="cart-icon mr-2">&#128722; Krepšelis</a>
-            <a href="redaguoti_paskyra.html" class="profile-icon">&#128100;</a>
-            <a href="atsijungti.html" class="btn btn-danger ml-2">Atsijungti</a>
+            <a href="atsijungti.php" class="btn btn-danger ml-2">Atsijungti</a>
 
         </div>
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-4">
-        <h2>Pagalbos užklausos</h2>
-        <table class="table table-bordered">
-            <thead class="thead-light">
-                <tr>
-                    <th>Pavadinimas</th>
-                    <th>Data</th>
-                    <th>Aprašas</th>
-                    <th>Būsena</th>
-                    <th>Veiksmai</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Sistemos klaida</td>
-                    <td>2024-11-11</td>
-                    <td>Klaida bandant prisijungti prie paskyros</td>
-                    <td>Sprendžiama</td>
-                    <td><a href="Redaguoti_uzklausa.html" class="btn btn-success">Redaguoti užklausą</a></td>
-                </tr>
-            </tbody>
-        </table>
-        <a href="sukurti_uzklausa.html" class="btn btn-success mt-3">Sukurti naują užklausą</a>
+    <div class="container content-container">
+        <h3>Pagalbos užklausa</h3>
+        
+        <form action="../Controllers/Naudotojo_sąsaja/sukurtiUzklausa.php" method="POST">
+            <div class="form-group">
+                <label for="pavadinimas">Pavadinimas</label>
+                <input type="text" class="form-control" id="pavadinimas" name="pavadinimas" required>
+            </div>
+            <div class="form-group">
+                <label for="aprasas">Aprašas</label>
+                <textarea class="form-control" id="aprasas" name="aprasas" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Išsaugoti</button>
+        </form>
+        
     </div>
 
     <!-- Bootstrap JS and dependencies -->

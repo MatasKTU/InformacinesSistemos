@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redaguoti roles</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Redaguoti roles</h2>
+        <a href="../../Sablonai/administratoriaus_pagrindinis.html" class="btn btn-secondary mb-3">Pagrindinis</a>
+        <table class="table table-bordered">
+            <thead class="thead-light">
+                <tr>
+                    <th>Vardas</th>
+                    <th>Pavardė</th>
+                    <th>El. paštas</th>
+                    <th>Rolė</th>
+                    <th>Veiksmai</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($naudotojai as $naudotojas): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($naudotojas['vardas']); ?></td>
+                        <td><?php echo htmlspecialchars($naudotojas['pavarde']); ?></td>
+                        <td><?php echo htmlspecialchars($naudotojas['el_pastas']); ?></td>
+                        <td><?php echo htmlspecialchars($naudotojas['role']); ?></td>
+                        <td>
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="naudotojas_id" value="<?php echo $naudotojas['id_Naudotojas']; ?>">
+                                <select name="role" class="form-control" style="width:auto; display:inline;">
+                                    <?php foreach ($roles as $role): ?>
+                                        <option value="<?php echo $role; ?>" <?php if ($role == $naudotojas['role']) echo 'selected'; ?>>
+                                            <?php echo htmlspecialchars($role); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <button type="submit" class="btn btn-primary">Keisti</button>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

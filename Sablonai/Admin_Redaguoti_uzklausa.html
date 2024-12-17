@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Užklausos atsakymas</title>
-    <!-- Bootstrap CSS -->
+    <title>Redaguoti užklausą</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         .navbar .cart-icon {
             font-size: 1.5em;
@@ -19,41 +19,47 @@
         .content-container {
             margin-top: 30px;
         }
+        .navbar .message-icon {
+            font-size: 1.5em;
+            cursor: pointer;
+            margin-left: 15px;
+        }
     </style>
 </head>
-
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-success">
-        <span class="navbar-brand text-white">Pagalbos užklausos atsakymas</span>
+        <span class="navbar-brand text-white">Pagalbos užklausos</span>
+        <a href="../../Sablonai/administratoriaus_pagrindinis.html" class="btn btn-light mr-3">Pagrindinis</a>
         <div class="ml-auto d-flex align-items-center">
             <a href="redaguoti_paskyra.html" class="profile-icon">&#128100;</a>
             <a href="atsijungti.html" class="btn btn-danger ml-2">Atsijungti</a>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container content-container">
-        <h3>Atsakyti į užklausą</h3>
-        
+    <div class="container mt-4">
+        <h2>Redaguoti užklausą</h2>
+        <form method="POST">
             <div class="form-group">
                 <label for="pavadinimas">Pavadinimas</label>
-                <input type="text" class="form-control" id="pavadinimas" value="Sistemos klaida" required>
+                <input type="text" class="form-control" id="pavadinimas" name="pavadinimas" value="<?php echo htmlspecialchars($uzklausa['pavadinimas']); ?>" required>
             </div>
             <div class="form-group">
                 <label for="aprasas">Aprašas</label>
-                <textarea class="form-control" id="aprasas" rows="4" required>Klaida bandant prisijungti prie paskyros</textarea>
+                <textarea class="form-control" id="aprasas" name="aprasas" required><?php echo htmlspecialchars($uzklausa['aprasas']); ?></textarea>
             </div>
             <div class="form-group">
                 <label for="busena">Būsena</label>
-                <select class="form-control" id="busena" required>
-                    <option value="Sprendžiama" selected>Sprendžiama</option>
-                    <option value="Laukia">Laukiama</option>
-                    <option value="Išspręsta">Išspręsta</option>
+                <select class="form-control" id="busena" name="busena" required>
+                    <option value="1" <?php if ($uzklausa['busena'] == 1) echo 'selected'; ?>>Atsakyta</option>
+                    <option value="2" <?php if ($uzklausa['busena'] == 2) echo 'selected'; ?>>Laukiama</option>
                 </select>
             </div>
+            <div class="form-group">
+                <a href="../../Controllers/Naudotojo_sąsaja/klientoProfilis.php?id=<?php echo $uzklausa['fk_Klientas_id_Naudotojas']; ?>">Peržiūrėti informaciją apie Klientą</a>
+            </div>
             <button type="submit" class="btn btn-success">Išsaugoti</button>
-        
+        </form>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
